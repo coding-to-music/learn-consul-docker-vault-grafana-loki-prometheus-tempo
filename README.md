@@ -166,6 +166,8 @@ Perform the following steps of each section to explore the elements involved in 
 
 Navigate to http://localhost:8500/ on your browser to access the Consul UI. Consul will navigate to the services tab by default.
 
+![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/nodes-page-consul.png?raw=true)
+
 Image of Nodes page in Consul UI.
 
 Notice the services monitored by Consul. Each of the applications (ingress, web, and api) includes a sidecar proxy that makes up the service mesh.
@@ -176,7 +178,7 @@ Note: If your Consul UI details do not match the image above, restart your conta
 
 Navigate to http://localhost:9090/ui/ and refresh the page to generate traffic.
 
-![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/environment-overview.png?raw=true)
+![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/sample-application.png?raw=true)
 
 Image of sample application UI.
 
@@ -186,7 +188,7 @@ The example application shows the architecture of your complete application stac
 
 Navigate to http://localhost:9092/targets
 
-![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/environment-overview.png?raw=true)
+![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/prometheus-ui.png?raw=true)
 
 Image of targets page in Prometheus UI.
 
@@ -196,7 +198,7 @@ Notice that Prometheus is pre-configured to scrape metric-related data from four
 
 Navigate to http://localhost:3000/datasources
 
-![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/environment-overview.png?raw=true)
+![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/grafana.png?raw=true)
 
 Image of data sources page in Grafana UI.
 
@@ -210,7 +212,7 @@ Execute a search with these parameters: {container_name="web"} |= "trace_id"
 
 Open one of the log lines, locate the TraceID field, then click the nearby Tempo link to jump directly from logs to traces.
 
-![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/environment-overview.png?raw=true)
+![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/tempo-traces.png?raw=true)
 
 Image of linked logs and traces in Grafana UI.
 
@@ -224,7 +226,7 @@ Navigate to http://localhost:3000/dashboards
 
 Explore the metrics-related dashboards: Consul Server Monitoring and Node Exporter.
 
-![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/environment-overview.png?raw=true)
+![](https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo/blob/main/images/consul-node-exporter-metrics.png?raw=true)
 
 Image of Consul Server Monitoring metrics dashboard in Grafana UI.
 
