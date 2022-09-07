@@ -37,12 +37,12 @@ https://slugs.do-api.dev
 
 ## user interfaces:
 
-Consul http://localhost:8500
-Fake Service http://localhost:9090/ui
-Prometheus http://localhost:9092/targets
-Grafana Tempo http://localhost:3000/explore
-Grafana Dashboards http://localhost:3000/dashboards
-Grafana Datasources http://localhost:3000/datasources
+- Consul http://localhost:8500
+- Fake Service http://localhost:9090/ui
+- Prometheus http://localhost:9092/targets
+- Grafana Tempo http://localhost:3000/explore
+- Grafana Dashboards http://localhost:3000/dashboards
+- Grafana Datasources http://localhost:3000/datasources
 
 ## GitHub
 
