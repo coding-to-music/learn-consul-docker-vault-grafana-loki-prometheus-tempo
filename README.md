@@ -1,3 +1,52 @@
+# learn-consul-docker-vault-grafana-loki-prometheus-tempo
+
+# 🚀 Service Mesh Observability with Docker Compose vault grafana loki prometheus tempo 🚀
+
+https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo
+
+From / By https://learn.hashicorp.com/tutorials/consul/docker-compose-observability?in=consul/docker
+
+Example of a Grafana dashboard, using data from Prometheus:
+
+![The exporter container up and running](https://github.com/coding-to-music/terraform-cloudflare-prometheus-grafana/blob/main/images/image2-5.avif?raw=true)
+
+![Grafana screenshot](https://github.com/coding-to-music/terraform-cloudflare-prometheus-grafana/blob/main/images/grafana_prometheus.png?raw=true)
+
+## Digitalocean Droplet Prices
+
+https://github.com/andrewsomething/do-api-slugs
+
+https://slugs.do-api.dev
+
+```
+# https://slugs.do-api.dev/
+
+# s-1vcpu-512mb-10gb  $4    10GB
+# s-1vcpu-1gb         $6    25GB
+# s-1vcpu-2gb         $12   50GB
+# s-2vcpu-2gb         $18   60GB
+# s-2vcpu-4gb         $24   80GB
+# s-4vcpu-8gb         $48   160GB
+```
+
+## Environment variables:
+
+```java
+
+```
+
+## GitHub
+
+```java
+git init
+git add .
+git remote remove origin
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo.git
+git push -u origin main
+```
+
 # Overview
 
 This repository contains all the example assets associated with the Consul
