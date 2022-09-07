@@ -1,24 +1,29 @@
 ---
-
 version: "3.7"
 
 services:
-
   consul-server:
+    # image: hashicorp/consul:latest
     image: hashicorp/consul:1.8.10
     container_name: consul-server
-    command: ["consul", "agent", "-config-file=/config/config.hcl", "-config-dir=/config"]
+    command:
+      [
+        "consul",
+        "agent",
+        "-config-file=/config/config.hcl",
+        "-config-dir=/config",
+      ]
     volumes:
-    - "./consul:/config"
+      - "./consul:/config"
     ports:
-    - 8500:8500
+      - 8500:8500
     networks:
       vpcbr:
         ipv4_address: 10.5.0.2
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   ingress:
     image: nicholasjackson/fake-service:v0.21.0
@@ -37,14 +42,14 @@ services:
       TIMING_VARIANCE: 10
       TRACING_ZIPKIN: "http://tempo:9411"
     ports:
-    - "9090:9090"
+      - "9090:9090"
     networks:
       vpcbr:
         ipv4_address: 10.5.0.3
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
   ingress_proxy:
     image: nicholasjackson/consul-envoy:v1.6.1-v0.10.0
     container_name: ingress_proxy
@@ -56,14 +61,14 @@ services:
       SERVICE_CONFIG: /config/ingress_v1.hcl
       CENTRAL_CONFIG: "/central_config/ingress_defaults.hcl"
     volumes:
-    - "./fake-service/service_config:/config"
-    - "./fake-service/central_config:/central_config"
+      - "./fake-service/service_config:/config"
+      - "./fake-service/central_config:/central_config"
     command: ["consul", "connect", "envoy", "-sidecar-for", "ingress-v1"]
     network_mode: "service:ingress"
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   web:
     image: nicholasjackson/fake-service:v0.21.0
@@ -88,7 +93,7 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
   web_proxy:
     image: nicholasjackson/consul-envoy:v1.6.0-v0.10.0
     container_name: web_proxy
@@ -100,14 +105,14 @@ services:
       SERVICE_CONFIG: /config/web_v1.hcl
       CENTRAL_CONFIG: "/central_config/web_defaults.hcl"
     volumes:
-    - "./fake-service/service_config:/config"
-    - "./fake-service/central_config:/central_config"
+      - "./fake-service/service_config:/config"
+      - "./fake-service/central_config:/central_config"
     command: ["consul", "connect", "envoy", "-sidecar-for", "web-v1"]
     network_mode: "service:web"
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   api:
     image: nicholasjackson/fake-service:v0.21.0
@@ -133,7 +138,7 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
   api_proxy:
     image: nicholasjackson/consul-envoy:v1.6.0-v0.10.0
     container_name: api_proxy
@@ -145,16 +150,17 @@ services:
       SERVICE_CONFIG: /config/api_v1.hcl
       CENTRAL_CONFIG: "/central_config/api_defaults.hcl"
     volumes:
-    - "./fake-service/service_config:/config"
-    - "./fake-service/central_config:/central_config"
+      - "./fake-service/service_config:/config"
+      - "./fake-service/central_config:/central_config"
     command: ["consul", "connect", "envoy", "-sidecar-for", "api-v1"]
     network_mode: "service:api"
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   node-exporter:
+    # image: prom/node-exporter:latest
     image: prom/node-exporter:v1.1.2
     container_name: node-exporter
     restart: always
@@ -162,9 +168,9 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-    command: 
-      - '--path.procfs=/host/proc' 
-      - '--path.sysfs=/host/sys'
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     networks:
@@ -175,10 +181,11 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   prometheus:
-    image: prom/prometheus:v2.26.0
+    image: prom/prometheus:latest
+    # image: prom/prometheus:v2.26.0
     container_name: prometheus
     restart: always
     volumes:
@@ -194,10 +201,11 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   tempo:
-    image: grafana/tempo:1f1c40b3
+    image: grafana/tempo:latest
+    # image: grafana/tempo:1f1c40b3
     container_name: tempo
     command: ["-config.file=/etc/tempo.yaml"]
     volumes:
@@ -207,34 +215,35 @@ services:
         ipv4_address: 10.5.0.9
     ports:
       - "14268:14268" # jaeger ingest
-      - "3100"  # tempo
+      - "3100" # tempo
       - "9411:9411" #zipkin
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
-# Alternative to Tempo
-#  jaeger:
-#    image: jaegertracing/all-in-one:1.22
-#    container_name: jaeger
-#    environment:
-#      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
-#      COLLECTOR_ZIPKIN_HOST_PORT: 9411
-#    ports:
-#    - "5775:5775/udp"
-#    - "6831:6831/udp"
-#    - "6832:6832/udp"
-#    - "5778:5778"
-#    - "16686:16686"
-#    - "14268:14268"
-#    - "9411:9411"
-#    networks:
-#      vpcbr:
-#        ipv4_address: 10.5.0.6
+  # Alternative to Tempo
+  #  jaeger:
+  #    image: jaegertracing/all-in-one:1.22
+  #    container_name: jaeger
+  #    environment:
+  #      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+  #      COLLECTOR_ZIPKIN_HOST_PORT: 9411
+  #    ports:
+  #    - "5775:5775/udp"
+  #    - "6831:6831/udp"
+  #    - "6832:6832/udp"
+  #    - "5778:5778"
+  #    - "16686:16686"
+  #    - "14268:14268"
+  #    - "9411:9411"
+  #    networks:
+  #      vpcbr:
+  #        ipv4_address: 10.5.0.6
 
   grafana:
-    image: grafana/grafana:7.5.3
+    image: grafana/grafana:latest
+    # image: grafana/grafana:7.5.3
     container_name: grafana
     restart: always
     volumes:
@@ -253,17 +262,18 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
   loki:
-    image: grafana/loki:2.1.0
+    image: grafana/loki:latest
+    # image: grafana/loki:2.1.0
     container_name: loki
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       vpcbr:
         ipv4_address: 10.5.0.11
     ports:
-      - "3100:3100"                                   # loki needs to be exposed so it receives logs
+      - "3100:3100" # loki needs to be exposed so it receives logs
     environment:
       - JAEGER_AGENT_HOST=tempo
       - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
@@ -272,11 +282,11 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+        loki-url: "http://localhost:3100/api/prom/push"
 
 networks:
   vpcbr:
     driver: bridge
     ipam:
       config:
-      - subnet: 10.5.0.0/16
+        - subnet: 10.5.0.0/16
