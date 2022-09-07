@@ -1,6 +1,6 @@
 # learn-consul-docker-vault-grafana-loki-prometheus-tempo
 
-# 🚀 Service Mesh Observability with Docker Compose vault grafana loki prometheus tempo 🚀
+# 🚀 Service Mesh Observability with Docker Compose consul vault grafana loki prometheus tempo 🚀
 
 https://github.com/coding-to-music/learn-consul-docker-vault-grafana-loki-prometheus-tempo
 
