@@ -5,6 +5,17 @@
 *.so
 *.dylib
 
+counting-service_linux_amd64
+dashboard-service_linux_amd64
+counting-service
+dashboard-service
+
+# log files
+
+*.log
+consul-envoy-proxy/*.log
+./consul-envoy-proxy/*.log
+
 # Test binary, built with `go test -c`
 *.test
 

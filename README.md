@@ -515,3 +515,15 @@ If an agent is operating as a server, a graceful leave is important to avoid cau
 https://learn.hashicorp.com/tutorials/consul/get-started-service-discovery?in=consul/getting-started
 
 https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/getting-started
+
+Download two binaries and unzip them
+
+```
+wget https://github.com/hashicorp/demo-consul-101/releases/download/0.0.3.1/counting-service_linux_amd64.zip | unzip
+
+wget https://github.com/hashicorp/demo-consul-101/releases/download/0.0.3.1/dashboard-service_linux_amd64.zip | unzip
+
+mv dashboard-service_linux_amd64 dashboard-service
+
+mv counting-service_linux_amd64 counting-service
+```
