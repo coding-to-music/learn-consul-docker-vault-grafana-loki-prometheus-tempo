@@ -311,3 +311,53 @@ For additional reference documentation on the technologies and Docker images use
 - grafana/tempo GitHub Repository
 - prometheus/prometheus GitHub Repository
 - prometheus/node-exporter GitHub Repository
+
+## Install Consul
+
+HashiCorp officially maintains and signs packages for the following Linux distributions.
+
+Consul for HCP: Install the Enterprise binary for your OS distribution if you intend to connect to HCP. Enterprise editions are available at https://releases.hashicorp.com/consul and are identified by the +ent in the file name.
+
+Add the HashiCorp GPG key.
+
+```
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+```
+
+Add the official HashiCorp Linux repository.
+
+```
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+```
+
+Update and install (for OSS Consul binary)
+
+```
+sudo apt-get update
+
+sudo apt-get install consul
+```
+
+Update and install (for Enterprise Consul binary)
+
+```
+sudo apt-get update && sudo apt-get install consul-enterprise.x86_64
+```
+
+TIP: Now that you have added the HashiCorp repository, you can install Terraform, Vault, Nomad and Packer with the same command.
+
+### Verify the installation
+
+After installing Consul, verify that the installation worked by opening a new terminal session and running the command consul.
+
+```
+consul
+```
+
+```
+usage: consul [--version] [--help] <command> [<args>]
+
+Available commands are:
+    agent          Runs a Consul agent
+    event          Fire a new event
+```
