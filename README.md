@@ -314,6 +314,8 @@ For additional reference documentation on the technologies and Docker images use
 
 ## Install Consul
 
+https://learn.hashicorp.com/tutorials/consul/get-started-install?in=consul/getting-started
+
 HashiCorp officially maintains and signs packages for the following Linux distributions.
 
 Consul for HCP: Install the Enterprise binary for your OS distribution if you intend to connect to HCP. Enterprise editions are available at https://releases.hashicorp.com/consul and are identified by the +ent in the file name.
@@ -361,3 +363,155 @@ Available commands are:
     agent          Runs a Consul agent
     event          Fire a new event
 ```
+
+## Start the agent
+
+https://learn.hashicorp.com/tutorials/consul/get-started-agent?in=consul/getting-started
+
+Start the Consul agent in development mode.
+
+```
+consul agent -dev
+```
+
+## Discover datacenter members
+
+Check the membership of the Consul datacenter by running the consul members command in a new terminal window. The output lists the agents in the datacenter. We'll cover ways to join Consul agents together later on, but for now there is only one member (your machine).
+
+```
+consul members
+```
+
+```
+Node         Address         Status  Type    Build  Protocol  DC   Segment
+Judiths-MBP  127.0.0.1:8301  alive   server  1.5.2  2         dc1  <all>
+```
+
+The output displays your agent, its IP address, its health state, its role in the datacenter, and some version information. You can discover additional metadata by providing the -detailed flag.
+
+The members command runs against the Consul client, which gets its information via gossip protocol. The information that the client has is eventually consistent, but at any point in time its view of the world may not exactly match the state on the servers. For a strongly consistent view of the world, query the HTTP API, which forwards the request to the Consul servers.
+
+```
+curl localhost:8500/v1/catalog/nodes
+```
+
+```
+[
+  {
+    "ID": "019063f6-9215-6f2c-c930-9e84600029da",
+    "Node": "Judiths-MBP",
+    "Address": "127.0.0.1",
+    "Datacenter": "dc1",
+    "TaggedAddresses": {
+      "lan": "127.0.0.1",
+      "wan": "127.0.0.1"
+    },
+    "Meta": {
+      "consul-network-segment": ""
+    },
+    "CreateIndex": 9,
+    "ModifyIndex": 10
+  }
+]
+```
+
+In addition to the HTTP API, you can use the DNS interface to discover the nodes. The DNS interface will send your query to the Consul servers unless you've enabled caching. To perform DNS lookups you have to point to the Consul agent's DNS server, which runs on port 8600 by default. The format of the DNS entries (such as Judiths-MBP.node.consul) will be covered in more detail later.
+
+```
+dig @127.0.0.1 -p 8600 Judiths-MBP.node.consul
+
+dig @127.0.0.1 -p 8600 docker-ubuntu-s-1vcpu-1gb-nyc1-01
+```
+
+```
+; <<>> DiG 9.10.6 <<>> @127.0.0.1 -p 8600 Judiths-MBP.node.consul
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 7104
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 2
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;Judiths-MBP.node.consul. IN A
+
+;; ANSWER SECTION:
+Judiths-MBP.node.consul. 0 IN A 127.0.0.1
+
+;; ADDITIONAL SECTION:
+Judiths-MBP.node.consul. 0 IN TXT "consul-network-segment="
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#8600(127.0.0.1)
+;; WHEN: Mon Jul 15 19:43:58 PDT 2019
+;; MSG SIZE rcvd: 104
+
+```
+
+## Consul UI
+
+http://localhost:8500/ui/dc1/services
+
+http://localhost:8500/ui/dc1/overview/server-status
+
+## Stop the agent
+
+Stop the Consul agent by using the consul leave command. This will gracefully stop the agent, causing it to leave the Consul datacenter and shut down.
+
+```
+
+consul leave
+
+```
+
+```
+
+Graceful leave complete
+
+```
+
+If you switch back to the window with Consul's streaming log output, the logs indicate that the Consul agent left the datacenter.
+
+[INFO] consul: server starting leave
+[INFO] serf: EventMemberLeave: Judiths-MBP.dc1 127.0.0.1
+[INFO] consul: Handled member-leave event for server "Judiths-MBP.dc1" in area "wan"
+[INFO] manager: shutting down
+[INFO] serf: EventMemberLeave: Judiths-MBP 127.0.0.1
+[INFO] consul: Removing LAN server Judiths-MBP (Addr: tcp/127.0.0.1:8300) (DC: dc1)
+[WARN] consul: deregistering self (Judiths-MBP) should be done by follower
+[ERR] autopilot: Error updating cluster health: error getting server raft protocol versions: No servers found
+[INFO] consul: Waiting 5s to drain RPC traffic
+[ERR] autopilot: Error updating cluster health: error getting server raft protocol versions: No servers found
+[ERR] autopilot: Error updating cluster health: error getting server raft protocol versions: No servers found
+[ERR] agent: Coordinate update error: No cluster leader
+[ERR] autopilot: Error updating cluster health: error getting server raft protocol versions: No servers found
+[INFO] agent: Requesting shutdown
+[WARN] agent: dev mode disabled persistence, killing all proxies since we can't recover them
+[DEBUG] agent/proxy: Stopping managed Connect proxy manager
+[INFO] consul: shutting down server
+[INFO] agent: consul server down
+[INFO] agent: shutdown complete
+[DEBUG] http: Request PUT /v1/agent/leave (11.004695827s) from=127.0.0.1:54434
+[INFO] agent: Stopping DNS server 127.0.0.1:8600 (tcp)
+[INFO] agent: Stopping DNS server 127.0.0.1:8600 (udp)
+[INFO] agent: Stopping HTTP server 127.0.0.1:8500 (tcp)
+[INFO] agent: Waiting for endpoints to shut down
+[INFO] agent: Endpoints down
+[INFO] agent: Exit code: 0
+
+```
+
+When you issue the leave command, Consul notifies other members that the agent left the datacenter. When an agent leaves, its local services running on the same node and their checks are removed from the catalog and Consul doesn't try to contact that node again.
+
+Forcibly killing the agent process indicates to other agents in the Consul datacenter that the node failed instead of left. When a node fails, its health is marked as critical, but it is not removed from the catalog. Consul will automatically try to reconnect to a failed node, assuming that it may be unavailable because of a network partition, and that it may be coming back.
+
+If an agent is operating as a server, a graceful leave is important to avoid causing a potential availability outage affecting the consensus protocol. Check the Adding and Removing Servers tutorial for details on how to safely add and remove servers.
+```
+
+# Additional consul tutorial
+
+https://learn.hashicorp.com/tutorials/consul/get-started-service-discovery?in=consul/getting-started
+
+https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/getting-started
