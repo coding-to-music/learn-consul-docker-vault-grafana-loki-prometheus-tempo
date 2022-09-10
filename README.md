@@ -1078,7 +1078,10 @@ consul agent \
  -config-dir=/etc/consul.d
 
 ...
+```
+
 ## Start Consul client
+
 Open a new terminal window and move into consul-getting-started-join directory. Then ssh into your second virtual machine.
 
 ```
@@ -1104,7 +1107,9 @@ consul agent \
  -config-dir=/etc/consul.d
 
 ```
+
 ## Check datacenter membership
+
 Now you have two Consul agents running: one server and one client. The two agents still don't know about each other and each comprise their own single-node datacenters.
 
 Verify this by ssh-ing into each VM and checking each agent's membership information. You'll need to open a new terminal window and change into the consul-getting-started-join directory.
@@ -1146,6 +1151,7 @@ Open a new terminal window and change directories into consul-getting-started-jo
 Check the membership of agent-one.
 
 ```
+
 vagrant ssh n1
 
 Linux n1 4.9.0-9-amd64 #1 SMP Debian 4.9.168-1+deb9u2 (2019-05-13) x86_64
@@ -1160,6 +1166,7 @@ You have new mail.
 Last login: Fri Aug 2 20:37:46 2019 from 10.0.2.2
 
 vagrant@n1:~$
+
 ```
 
 Note: Do not copy the vagrant@n1:~
@@ -1168,11 +1175,14 @@ when copying the command. This special prompt reminds you that you are ssh-ed in
 vagrant@n1:~
 
 ```
+
 consul members
 
 Node Address Status Type Build Protocol DC Segment
 agent-one 172.20.20.10:8301 alive server 1.9.3 2 dc1 <all>
+
 ## Join the agents
+
 You're now ready to create your multi-agent datacenter. Open the terminal window where you are ssh-ed into the second VM, and run the consul join command on the Consul client, giving it the bind address of the Consul server.
 
 Note: Do not copy the vagrant@n2:~
@@ -1306,4 +1316,7 @@ In this tutorial, you set up a multi-agent Consul datacenter by joining two Cons
 - Get Started with Consul Service Mesh
 - Consul on Kubernetes
 - Consul and Nomad
+
+```
+
 ```
