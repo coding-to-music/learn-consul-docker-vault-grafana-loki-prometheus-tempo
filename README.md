@@ -955,8 +955,7 @@ mkdir consul-getting-started-join
 Create a new file in the directory called `Vagrantfile` and paste the code below into it. This file will instruct Vagrant to create two virtual machines on your computer with the Consul binary preinstalled.
 
 ```
-# -_- mode: ruby -_-
-
+# -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 $script = <<SCRIPT
@@ -965,12 +964,12 @@ sudo apt-get update
 sudo apt-get install -y unzip curl jq dnsutils
 echo "Determining Consul version to install ..."
 CHECKPOINT_URL="https://checkpoint-api.hashicorp.com/v1/check"
-if [ -z "$CONSUL*DEMO_VERSION" ]; then
-CONSUL_DEMO_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq .current_version | tr -d '"')
+if [ -z "$CONSUL_DEMO_VERSION" ]; then
+    CONSUL_DEMO_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq .current_version | tr -d '"')
 fi
 echo "Fetching Consul version ${CONSUL_DEMO_VERSION} ..."
 cd /tmp/
-curl -s https://releases.hashicorp.com/consul/${CONSUL_DEMO_VERSION}/consul*${CONSUL_DEMO_VERSION}\_linux_amd64.zip -o consul.zip
+curl -s https://releases.hashicorp.com/consul/${CONSUL_DEMO_VERSION}/consul_${CONSUL_DEMO_VERSION}_linux_amd64.zip -o consul.zip
 echo "Installing Consul version ${CONSUL_DEMO_VERSION} ..."
 unzip consul.zip
 sudo chmod +x consul
@@ -980,39 +979,79 @@ sudo chmod a+w /etc/consul.d
 SCRIPT
 
 # Specify a Consul version
-
 CONSUL_DEMO_VERSION = ENV['CONSUL_DEMO_VERSION']
 
 # Specify a custom Vagrant box for the demo
-
 DEMO_BOX_NAME = ENV['DEMO_BOX_NAME'] || "debian/stretch64"
 
 # Vagrantfile API/syntax version.
-
 # NB: Don't touch unless you know what you're doing!
-
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-config.vm.box = DEMO_BOX_NAME
+  config.vm.box = DEMO_BOX_NAME
 
-config.vm.provision "shell",
-inline: $script,
-env: {'CONSUL_DEMO_VERSION' => CONSUL_DEMO_VERSION}
+  config.vm.provision "shell",
+                          inline: $script,
+                          env: {'CONSUL_DEMO_VERSION' => CONSUL_DEMO_VERSION}
 
-config.vm.define "n1" do |n1|
-n1.vm.hostname = "n1"
-n1.vm.network "private_network", ip: "172.20.20.10"
-end
+  config.vm.define "n1" do |n1|
+      n1.vm.hostname = "n1"
+      n1.vm.network "private_network", ip: "172.20.20.10"
+  end
 
-config.vm.define "n2" do |n2|
-n2.vm.hostname = "n2"
-n2.vm.network "private_network", ip: "172.20.20.11"
-end
+  config.vm.define "n2" do |n2|
+      n2.vm.hostname = "n2"
+      n2.vm.network "private_network", ip: "172.20.20.11"
+  end
 end
 ```
 
-Boot your two virtual machines. This may take a moment to download everything needed for the environment to spin up.
+## Install Vagrant
+
+```
+sudo apt install vagrant
+```
+
+## Install VirtualBox
+
+https://www.virtualbox.org/wiki/Linux_Downloads
+
+https://itsfoss.com/install-virtualbox-ubuntu/
+
+https://phoenixnap.com/kb/install-virtualbox-on-ubuntu
+
+First, add the key for the repository. You can download and add the key using this single command.
+
+```
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+```
+
+Now add the Oracle VirtualBox repository to the list of repositories using this command:
+
+```
+sudo add-apt-repository "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib"
+```
+
+Install VirtualBox
+
+```
+sudo apt update
+
+sudo apt-get install virtualbox-6.1
+```
+
+```
+virtualbox --version
+Qt WARNING: could not connect to display
+Qt FATAL: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, xcb.
+
+Aborted (core dumped)
+```
+
+## Boot your two virtual machines. This may take a moment to download everything needed for the environment to spin up.
 
 ```
 vagrant up
