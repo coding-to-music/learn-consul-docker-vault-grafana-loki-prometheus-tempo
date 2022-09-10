@@ -1179,21 +1179,27 @@ Note: Do not copy the vagrant@n2:~
 when copying the command. This special prompt reminds you that you are ssh-ed into the second virtual machine.
 
 vagrant@n2:~
+
 ```
 
 consul join 172.20.20.10
 
 Successfully joined cluster by contacting 1 nodes.
+
+```
+
 In the same window, run consul members again and you should get both agents listed in the output.
 
 vagrant@n2:~
 
 ```
+
 consul members
 
 Node Address Status Type Build Protocol DC Segment
 agent-one 172.20.20.10:8301 alive server 1.9.3 2 dc1 <all>
 agent-two 172.20.20.11:8301 alive client 1.9.3 2 dc1 <default>
+
 ```
 
 Switch to the terminal window where your Consul server is running on the first VM, and you'll notice some log output indicating that agent two joined it.
@@ -1201,6 +1207,7 @@ Switch to the terminal window where your Consul server is running on the first V
 Now switch to the terminal where your client is running on the second VM. You'll notice that the client had been throwing warnings and errors indicating that no servers were available. When the client learned about the server, it stopped throwing errors and synced its node information.
 
 ```
+
 ...
 [WARN] agent.router.manager: No servers available
 [ERROR] agent.anti_entropy: failed to sync remote state: error="No known Consul servers"
@@ -1212,6 +1219,7 @@ Now switch to the terminal where your client is running on the second VM. You'll
 [INFO] agent.client: adding server: server="agent-one (Addr: tcp/172.20.20.10:8300) (DC: dc1)"
 [INFO] agent: Synced node info
 ...
+
 ```
 
 Consul clients can not function without a server. All datacenters must have at least one agent running in server mode for Consul to function correctly.
@@ -1223,11 +1231,13 @@ Switch to the window where you are ssh-ed onto the second VM and run consul memb
 vagrant@n2:~
 
 ```
+
 consul members
 
 Node Address Status Type Build Protocol DC Segment
 agent-one 172.20.20.10:8301 alive server 1.9.3 2 dc1 <all>
 agent-two 172.20.20.11:8301 alive client 1.9.3 2 dc1 <default>
+
 ```
 
 Tip: To join a datacenter, a Consul agent only needs to learn about one other existing member, which can be a client or a server. After joining the datacenter, the agents automatically gossip with each other to propagate full membership information.
@@ -1249,6 +1259,7 @@ From the terminal window where you are ssh-ed into agent-one, query the DNS inte
 vagrant@n1:~
 
 ```
+
 dig @127.0.0.1 -p 8600 agent-two.node.consul
 
 ...
@@ -1258,6 +1269,7 @@ dig @127.0.0.1 -p 8600 agent-two.node.consul
 
 ;; ANSWER SECTION:
 agent-two.node.consul. 0 IN A 172.20.20.11
+
 ```
 
 The ability to look up nodes in addition to services is useful for system administration, in addition to service discovery. For example, knowing the address of the node to SSH into is as easy as making the node a part of the Consul datacenter and querying it.
@@ -1275,16 +1287,20 @@ It will not get rid of the directory you created or the Vagrant file it contains
 Clean up your virtual environment by running the following command from within the consul-getting-started-join directory.
 
 ```
+
 vagrant destroy
+
 ```
 
 ```
+
 n2: Are you sure you want to destroy the 'n2' VM? [y/N] y
 ==> n2: Forcing shutdown of VM...
 ==> n2: Destroying VM and associated drives...
 n1: Are you sure you want to destroy the 'n1' VM? [y/N] y
 ==> n1: Forcing shutdown of VM...
 ==> n1: Destroying VM and associated drives...
+
 ```
 
 ## Next steps
@@ -1294,3 +1310,4 @@ In this tutorial, you set up a multi-agent Consul datacenter by joining two Cons
 - Get Started with Consul Service Mesh
 - Consul on Kubernetes
 - Consul and Nomad
+```
