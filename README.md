@@ -1085,9 +1085,7 @@ consul agent \
 Open a new terminal window and move into consul-getting-started-join directory. Then ssh into your second virtual machine.
 
 ```
-
 vagrant ssh n2
-
 ```
 
 Now start up your second Consul agent in client mode. You'll set the bind address to the IP address of the second VM (172.20.20.11, specified in the Vagrantfile) and the name to agent-two. Don't include the -server flag and the agent will start in client mode. Consul will run in the foreground of your terminal.
@@ -1098,14 +1096,12 @@ when copying the command. This special prompt reminds you that you are ssh-ed in
 vagrant@n2:~
 
 ```
-
 consul agent \
  -node=agent-two \
  -bind=172.20.20.11 \
  -enable-script-checks=true \
  -data-dir=/tmp/consul \
  -config-dir=/etc/consul.d
-
 ```
 
 ## Check datacenter membership
@@ -1117,7 +1113,6 @@ Verify this by ssh-ing into each VM and checking each agent's membership informa
 Check the membership of agent-two.
 
 ```
-
 vagrant ssh n2
 
 Linux n2 4.9.0-9-amd64 #1 SMP Debian 4.9.168-1+deb9u2 (2019-05-13) x86_64
@@ -1132,7 +1127,6 @@ You have new mail.
 Last login: Fri Aug 2 23:42:33 2019 from 10.0.2.2
 
 vagrant@n2:~$
-
 ```
 
 Note: Do not copy the vagrant@n2:~
@@ -1141,7 +1135,6 @@ when copying the command. This special prompt reminds you that you are ssh-ed in
 vagrant@n2:~
 
 ```
-
 consul members
 
 Node Address Status Type Build Protocol DC Segment
@@ -1149,11 +1142,11 @@ agent-two 172.20.20.11:8301 alive client 1.9.3 2 dc1 <default>
 Open a new terminal window and change directories into consul-getting-started-join.
 
 Check the membership of agent-one.
-
 ```
 
 vagrant ssh n1
 
+```
 Linux n1 4.9.0-9-amd64 #1 SMP Debian 4.9.168-1+deb9u2 (2019-05-13) x86_64
 
 The programs included with the Debian GNU/Linux system are free software;
@@ -1166,7 +1159,6 @@ You have new mail.
 Last login: Fri Aug 2 20:37:46 2019 from 10.0.2.2
 
 vagrant@n1:~$
-
 ```
 
 Note: Do not copy the vagrant@n1:~
@@ -1175,11 +1167,11 @@ when copying the command. This special prompt reminds you that you are ssh-ed in
 vagrant@n1:~
 
 ```
-
 consul members
 
 Node Address Status Type Build Protocol DC Segment
 agent-one 172.20.20.10:8301 alive server 1.9.3 2 dc1 <all>
+```
 
 ## Join the agents
 
@@ -1190,6 +1182,7 @@ when copying the command. This special prompt reminds you that you are ssh-ed in
 
 vagrant@n2:~
 
+```
 consul join 172.20.20.10
 
 Successfully joined cluster by contacting 1 nodes.
@@ -1316,6 +1309,12 @@ In this tutorial, you set up a multi-agent Consul datacenter by joining two Cons
 - Get Started with Consul Service Mesh
 - Consul on Kubernetes
 - Consul and Nomad
+
+```
+
+```
+
+```
 
 ```
 
