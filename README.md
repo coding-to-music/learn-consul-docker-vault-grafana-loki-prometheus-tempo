@@ -1180,13 +1180,9 @@ when copying the command. This special prompt reminds you that you are ssh-ed in
 
 vagrant@n2:~
 
-```
-
 consul join 172.20.20.10
 
 Successfully joined cluster by contacting 1 nodes.
-
-```
 
 In the same window, run consul members again and you should get both agents listed in the output.
 
